@@ -10,7 +10,7 @@ services:
     volumes:
       - grafana_data:/var/lib/grafana
   back:
-    container_name: backend_service
+    container_name: back
     build:
       dockerfile: Dockerfile
       context: ./back_front/back
@@ -19,6 +19,17 @@ services:
     depends_on:
       db:
         condition: service_healthy
+
+  front:
+    container_name: front
+    build:
+      dockerfile: Dockerfile
+      context: ./back_front/front
+    ports:
+      - "8080:80"
+    depends_on:
+      - back
+
   db:
     image: postgres
     container_name: postgres_db

@@ -13,7 +13,7 @@
     <script>
         async function callBackend() {
             try {
-                const response = await fetch('/');
+                const response = await fetch('http://localhost:3003');
                 const data = await response.json();
                 document.getElementById('response').textContent = JSON.stringify(data, null, 2);
             } catch (error) {

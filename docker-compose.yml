@@ -9,6 +9,31 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=password
     volumes:
       - grafana_data:/var/lib/grafana
+  back:
+    container_name: backend_service
+    build:
+      dockerfile: Dockerfile
+      context: ./back_front/back
+    ports:
+      - "3003:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: postgres
+    container_name: postgres_db
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U user" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5433:5432"
+
 
 volumes:
   grafana_data:

@@ -18,6 +18,18 @@ services:
       - "9090:9090"
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
+  postgres-exporter:
+    image: quay.io/prometheuscommunity/postgres-exporter
+    container_name: postgres_exporter
+    environment:
+      DATA_SOURCE_URI: "db:5432/mydatabase?sslmode=disable"
+      DATA_SOURCE_USER: user
+      DATA_SOURCE_PASS: password
+    ports:
+      - "9187:9187"
+    depends_on:
+      - db
+    restart: unless-stopped
   back:
     container_name: back
     build:
